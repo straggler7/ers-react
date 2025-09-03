@@ -1,0 +1,139 @@
+import React from 'react';
+import { useReactTable, ColumnDef } from '@tanstack/react-table';
+import { WorkRecord } from '@/types/workRecord';
+import { StatusBadge } from '@/components/ui/StatusBadge';
+
+interface WorkRecordsTableProps {
+  data: WorkRecord[];
+  onRowClick: (record: WorkRecord) => void;
+  selectedRows: string[];
+  onRowSelect: (recordId: string, isSelected: boolean) => void;
+  onSelectAll: (isSelected: boolean) => void;
+}
+
+const columns: ColumnDef<WorkRecord>[] = [
+  {
+    id: 'select',
+    header: () => (
+      <input type="checkbox" />
+    ),
+    cell: ({ row }) => (
+      <input
+        type="checkbox"
+        checked={row.original.selected}
+        onChange={(e) => {
+          row.toggleSelected();
+        }}
+      />
+    ),
+    enableSorting: false,
+    enableColumnFilter: false,
+  },
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    cell: ({ getValue }) => (
+      <span className="font-medium text-gray-900">{getValue<string>()}</span>
+    ),
+  },
+  {
+    accessorKey: 'dln',
+    header: 'DLN',
+    cell: ({ getValue }) => (
+      <span className="font-mono text-sm text-gray-700">{getValue<string>()}</span>
+    ),
+  },
+  {
+    accessorKey: 'serviceCenter',
+    header: 'Service Center',
+  },
+  {
+    accessorKey: 'formType',
+    header: 'Form Type',
+  },
+  {
+    accessorKey: 'returnType',
+    header: 'Return Type',
+  },
+  {
+    accessorKey: 'taxPeriod',
+    header: 'Tax Period',
+  },
+  {
+    accessorKey: 'errors',
+    header: 'Errors',
+    cell: ({ getValue }) => (
+      <span className="text-sm text-gray-600">{getValue<string>()}</span>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ getValue }) => (
+      <StatusBadge status={getValue<WorkRecord['status']>()} />
+    ),
+  },
+  {
+    accessorKey: 'assignedTo',
+    header: 'Assigned To',
+  },
+  {
+    accessorKey: 'controlDay',
+    header: 'Control Day',
+  },
+  {
+    accessorKey: 'updatedDate',
+    header: 'Updated Date',
+  },
+];
+
+const WorkRecordsTable: React.FC<WorkRecordsTableProps> = ({
+  data,
+  onRowClick,
+  selectedRows,
+  onRowSelect,
+  onSelectAll,
+}) => {
+  const table = useReactTable({
+    data,
+    columns,
+  });
+
+  return (
+    <table>
+      <thead>
+        {table.getHeaderGroups().map(headerGroup => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map(column => (
+              <th key={column.id}>
+                {column.render('Header')}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody>
+        {table.getRowModel().rows.map(row => (
+          <tr key={row.id}>
+            {row.render('Row')}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export default WorkRecordsTable;
+
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+
+
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
